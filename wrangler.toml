@@ -1,0 +1,41 @@
+# DealScout AI – ein Worker liefert API (Hono), Cron und das gebaute Frontend aus.
+# Hinweis: Cron Triggers gibt es nur für Workers, nicht für Pages Functions.
+# Deshalb läuft alles als ein Worker mit "Static Assets" (dem Pages-Nachfolger).
+name = "dealscout-ai"
+main = "worker/index.ts"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Frontend (Vite-Build). Das Verzeichnis setzt das Cloudflare-Vite-Plugin automatisch.
+[assets]
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]
+
+# D1-Datenbank. database_id nach `npm run db:create` hier eintragen.
+[[d1_databases]]
+binding = "DB"
+database_name = "dealscout-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Workers AI (kostenloses Kontingent, Standard-KI-Anbieter)
+[ai]
+binding = "AI"
+
+# Alle 6 Stunden aktive Suchaufträge ausführen (UTC)
+[triggers]
+crons = ["0 */6 * * *"]
+
+[observability]
+enabled = true
+
+# Nicht geheime Konfiguration. Secrets (API-Keys) gehören in .dev.vars bzw. `wrangler secret put`.
+[vars]
+AI_PROVIDER = "workers-ai"            # workers-ai | gemini | groq | none
+WORKERS_AI_MODEL = "@cf/meta/llama-3.1-8b-instruct"
+GEMINI_MODEL = "gemini-flash-latest"
+GROQ_MODEL = "llama-3.1-8b-instant"
+SEARCH_PROVIDER = "auto"              # auto | brave | serper | duckduckgo
+EMAIL_FROM = "DealScout AI <onboarding@resend.dev>"
+MAX_WATCHES_PER_RUN = "10"            # Obergrenze je Cron-Lauf (Subrequest-Limits)

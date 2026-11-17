@@ -1,0 +1,25 @@
+# Kopieren nach .dev.vars (lokal) – für Produktion: `npx wrangler secret put <NAME>`
+# Alle Werte sind optional: ohne Keys laufen DuckDuckGo + MyDealz + Kleinanzeigen
+# und eine regelbasierte Bewertung als Fallback.
+
+# --- KI -----------------------------------------------------------------
+# Nur nötig, wenn AI_PROVIDER=gemini (https://aistudio.google.com/apikey)
+GEMINI_API_KEY=
+# Nur nötig, wenn AI_PROVIDER=groq (https://console.groq.com/keys)
+GROQ_API_KEY=
+
+# --- Web-Suche ----------------------------------------------------------
+# Brave Search API (https://api-dashboard.search.brave.com) oder Serper.dev-Key.
+# Welcher Dienst gemeint ist, steuert SEARCH_PROVIDER in wrangler.toml
+# ("auto" = Brave, sobald ein Key gesetzt ist, sonst DuckDuckGo ohne Key).
+SEARCH_API_KEY=
+
+# --- E-Mail -------------------------------------------------------------
+# Resend (https://resend.com/api-keys)
+RESEND_API_KEY=
+# Standard-Empfänger; kann im Dashboard unter "Einstellungen" überschrieben werden
+NOTIFICATION_EMAIL=
+
+# --- Zugriffsschutz -----------------------------------------------------
+# Wenn gesetzt, verlangt das Dashboard dieses Passwort (empfohlen für Produktion)
+APP_PASSWORD=
